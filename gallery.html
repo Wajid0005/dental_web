@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery & Testimonials – Indira Dental Clinic</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Specific styles for gallery filters not covered in main style.css */
+    .filter-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .filter-tab {
+      background: var(--bg-alt);
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .filter-tab.active,
+    .filter-tab:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 43, 29, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: var(--radius);
+      object-fit: contain;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox.open img {
+      transform: scale(1);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 32px;
+      right: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: none;
+      font-size: 24px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: rotate(90deg);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="home.html" class="logo">
+        <span class="logo-icon">🦷</span>
+        <div class="logo-text">
+          <span class="logo-name">Indira Dental</span>
+          <span class="logo-sub">Clinic & Orthodontic Care</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <a href="contact.html#appointment" class="nav-cta">Book Appointment</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html">🏠 Home</a>
+    <a href="about.html">👨‍⚕️ About</a>
+    <a href="gallery.html" class="active">🖼️ Gallery</a>
+    <a href="contact.html">📞 Contact</a>
+    <a href="contact.html#appointment" class="mobile-cta">📅 Book Appointment</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero" style="text-align: center;">
+    <div class="container reveal scale-up">
+      <div class="breadcrumb" style="justify-content: center;"><a href="home.html">Home</a><span>/</span><span>Gallery &
+          Testimonials</span></div>
+      <h1 class="section-title">Our Clinic &<br><em>Happy Patients</em></h1>
+      <p class="section-sub" style="margin: 0 auto;">A glimpse inside our modern clinic and the beautiful smiles we've
+        helped create. Real stories from real patients.</p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section style="background: var(--bg);">
+    <div class="container">
+      <div class="text-center reveal" style="margin-bottom: 48px;">
+        <span class="section-tag">Visual Tour</span>
+        <h2 class="section-title">Inside Indira Dental</h2>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-tabs reveal">
+        <button class="filter-tab active" onclick="filterGallery('all', this)">All Photos</button>
+        <button class="filter-tab" onclick="filterGallery('clinic', this)">Clinic Area</button>
+        <button class="filter-tab" onclick="filterGallery('treatment', this)">Treatments</button>
+        <button class="filter-tab" onclick="filterGallery('smile', this)">Beautiful Smiles</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gallery-item reveal" data-cat="clinic" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=600&q=80"
+            alt="Dental chair">
+          <div class="overlay"><span class="overlay-label">🏥 Clinic Interior</span></div>
+        </div>
+        <div class="gallery-item reveal" data-cat="treatment" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=600&q=80"
+            alt="Dental treatment">
+          <div class="overlay"><span class="overlay-label">🦷 Patient Care</span></div>
+        </div>
+        <div class="gallery-item reveal" data-cat="smile" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80"
+            alt="Beautiful smile">
+          <div class="overlay"><span class="overlay-label">✨ Bright Smile</span></div>
+        </div>
+        <div class="gallery-item reveal" data-cat="treatment" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1629909615957-be38d48fbbe4?auto=format&fit=crop&w=600&q=80"
+            alt="Dental procedure">
+          <div class="overlay"><span class="overlay-label">🔬 Dental Procedure</span></div>
+        </div>
+        <div class="gallery-item reveal" data-cat="clinic" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=600&q=80"
+            alt="Clinic reception">
+          <div class="overlay"><span class="overlay-label">🏥 Reception Area</span></div>
+        </div>
+        <div class="gallery-item reveal" data-cat="smile" onclick="openLightbox(this)">
+          <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?auto=format&fit=crop&w=600&q=80"
+            alt="Happy patient">
+          <div class="overlay"><span class="overlay-label">😊 Happy Patient</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" src="" alt="Gallery Image zoomed">
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section class="services">
+    <div class="container">
+      <div class="text-center reveal" style="margin-bottom: 64px;">
+        <span class="section-tag">Patient Reviews</span>
+        <h2 class="section-title">What Our Patients Say</h2>
+        <p class="section-sub">Words straight from the people who trust us with their smiles.</p>
+      </div>
+
+      <!-- Featured Review -->
+      <div class="dark-section reveal scale-up"
+        style="border-radius: var(--radius-lg); padding: 56px 48px; margin-bottom: 48px; text-align: center;">
+        <div style="font-size: 24px; color: #F59E0B; margin-bottom: 24px; letter-spacing: 4px;">★★★★★</div>
+        <p
+          style="font-family: 'Cormorant Garamond', serif; font-size: 28px; font-style: italic; color: #fff; line-height: 1.5; margin-bottom: 32px; max-width: 900px; margin-left: auto; margin-right: auto;">
+          "I was extremely anxious about getting braces as an adult, but the doctor made the entire process so
+          comfortable and clear. Six months in and I can already see a huge difference. Highly recommended to anyone in
+          Kamarhati!"
+        </p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 16px;">
+          <div
+            style="width: 56px; height: 56px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+            👩</div>
+          <div style="text-align: left;">
+            <div style="color: #fff; font-weight: 600; font-size: 16px;">Priya Sharma</div>
+            <div style="color: rgba(255,255,255,0.6); font-size: 13px;">Orthodontic patient · Agarpara</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid Reviews -->
+      <div class="grid-3">
+        <div class="premium-card reveal fade-left">
+          <div style="color: #F59E0B; font-size: 16px; margin-bottom: 12px; letter-spacing: 2px;">★★★★★</div>
+          <p style="font-style: italic; color: var(--text-muted); margin-bottom: 20px;">"My kids were terrified of the
+            dentist before we came here. The doctor was so patient and gentle with them. Now my son actually asks when
+            we're going back! Amazing pediatric care."</p>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: auto;">
+            <div
+              style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent-pale); display: flex; align-items: center; justify-content: center; font-size: 18px;">
+              👨</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--text);">Rahul Das</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Pediatric dentistry</div>
+            </div>
+          </div>
+        </div>
+        <div class="premium-card reveal">
+          <div style="color: #F59E0B; font-size: 16px; margin-bottom: 12px; letter-spacing: 2px;">★★★★★</div>
+          <p style="font-style: italic; color: var(--text-muted); margin-bottom: 20px;">"Had a root canal done here last
+            month. Honestly, it was much less painful than I feared. Clean clinic, skilled hands, and the evening hours
+            work perfectly with my office schedule."</p>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: auto;">
+            <div
+              style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent-pale); display: flex; align-items: center; justify-content: center; font-size: 18px;">
+              👩</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--text);">Sneha Banerjee</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Root canal treatment</div>
+            </div>
+          </div>
+        </div>
+        <div class="premium-card reveal fade-right">
+          <div style="color: #F59E0B; font-size: 16px; margin-bottom: 12px; letter-spacing: 2px;">★★★★★</div>
+          <p style="font-style: italic; color: var(--text-muted); margin-bottom: 20px;">"Got teeth whitening done before
+            my wedding. Absolutely thrilled with the results — several guests commented on how bright my smile looked!
+            Very professional service."</p>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: auto;">
+            <div
+              style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent-pale); display: flex; align-items: center; justify-content: center; font-size: 18px;">
+              👰</div>
+            <div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--text);">Ananya Roy</div>
+              <div style="font-size: 12px; color: var(--text-muted);">Teeth whitening</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="dark-section" style="padding: 80px 0; text-align: center;">
+    <div class="container reveal scale-up">
+      <h2 class="section-title" style="color: #fff; margin-bottom: 24px;">Your Smile Transformation Awaits</h2>
+      <p class="section-sub" style="color: rgba(255,255,255,0.8); margin: 0 auto 32px; max-width: 600px;">Join hundreds
+        of satisfied patients. Book your appointment today.</p>
+      <a href="contact.html#appointment" class="btn btn-primary" style="background: #fff; color: var(--primary);">📅
+        Book Appointment</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="home.html" class="logo"><span class="logo-icon">🦷</span>
+            <div class="logo-text"><span class="logo-name" style="color:#fff;">Indira Dental</span><span
+                class="logo-sub" style="color:rgba(255,255,255,0.4);">Clinic & Orthodontic Care</span></div>
+          </a>
+          <p>Providing comprehensive dental and orthodontic care to families in Kamarhati and across north Kolkata.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">General Dentistry</a></li>
+            <li><a href="#">Orthodontics</a></li>
+            <li><a href="#">Teeth Whitening</a></li>
+            <li><a href="#">Pediatric Dentistry</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <div class="fci"><span class="ic">📍</span><span>Ground Floor, Sabuj Sathi Apartment, Elias Rd, Kamarhati,
+              Kolkata</span></div>
+          <div class="fci"><span class="ic">📞</span><a href="tel:+918240230646">+91 82402 30646</a></div>
+          <div class="fci"><span class="ic">🕐</span><span>Mon–Sat: 5:30–9 PM<br>Sunday: 4–9 PM</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 Indira Dental Clinic & Orthodontic Care. All rights reserved.</div>
+  </footer>
+
+  <div class="float-buttons">
+    <a href="https://wa.me/918240230646" target="_blank" class="float-btn whatsapp" aria-label="WhatsApp">
+      <span class="tip">WhatsApp Us</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+        <path
+          d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
+      </svg>
+    </a>
+    <a href="tel:+918240230646" class="float-btn call" aria-label="Call us">
+      <span class="tip">Call Now</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+        <path
+          d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+      </svg>
+    </a>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
